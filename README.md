@@ -178,7 +178,7 @@ HeadVault is designed to make this trivial:
 ## 🛠️ Building from source
 
 ```bash
-./gradlew build        # -> build/libs/head-vault-<version>.jar  (sgui + permissions bundled)
+./gradlew build        # -> build/libs/head-vault-<version>+26.1.1.jar  (sgui + permissions bundled)
 ./gradlew runServer    # launch a dev server to try it out
 ```
 
@@ -188,6 +188,7 @@ Requires JDK 25 on your `PATH`.
 
 - Branches: `master` (stable), `experimental` (preview). Every push/PR builds and uploads an artifact.
 - Tag `vX.Y.Z` → stable GitHub Release + jar. A tag with a `-` suffix (e.g. `v1.2.0-experimental.1`) → pre-release.
+- **The Minecraft version is always visible:** jars are named `head-vault-<modversion>+<mcversion>.jar` (e.g. `head-vault-1.0.0+26.1.1.jar`), the in-game mod version reads `1.0.0+26.1.1`, and the GitHub Release is titled `vX.Y.Z — Minecraft 26.1.1`. So `v1.0.0` alone never leaves players guessing.
 - Modrinth/CurseForge publishing is wired into the release workflow and ready to enable.
 
 ## 🙌 Credits

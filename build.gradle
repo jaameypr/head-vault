@@ -2,7 +2,9 @@ plugins {
 	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 }
 
-version = project.mod_version
+// Embed the Minecraft version (Fabric "+mc" convention) so the jar name and in-game mod version
+// make the target MC version obvious, e.g. head-vault-1.0.0+26.1.1.jar
+version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 base {
 	archivesName = project.archives_base_name
