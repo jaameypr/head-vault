@@ -1,0 +1,25 @@
+# Gradle / build
+.gradle/
+build/
+out/
+
+# Dev run + loom
+run/
+logs/
+.fabric/
+*.log
+
+# API-probe scratch (decompiled signatures used during development)
+.apiprobe/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "headvault",
+	"version": "${version}",
+	"name": "HeadVault",
+	"description": "Server-side custom-heads shop for SMP servers. Browse and buy player heads via a chest GUI, command, NPC, or named villager. Vanilla clients fully supported.",
+	"authors": [
+		"jaameypr"
+	],
+	"contact": {
+		"homepage": "https://github.com/jaameypr/head-vault",
+		"sources": "https://github.com/jaameypr/head-vault",
+		"issues": "https://github.com/jaameypr/head-vault/issues"
+	},
+	"license": "MIT",
+	"environment": "server",
+	"entrypoints": {
+		"main": [
+			"it.pruefert.headvault.HeadVault"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
