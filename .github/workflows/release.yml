@@ -72,5 +72,5 @@ jobs:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
       #     files: dist/*.jar
       #     loaders: fabric
-      #     game-versions: 26.1.1
+      #     game-versions: 26.1.2
       #     version-type: ${{ contains(github.ref_name, '-') && 'beta' || 'release' }}
