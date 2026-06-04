@@ -6,7 +6,7 @@ should touch one package. This document explains how that is achieved.
 ## Package map
 
 ```
-io.github.jaameypr.headvault
+it.pruefert.headvault
 ├─ HeadVault                 ModInitializer; wires access modes + lifecycle
 ├─ HeadVaultRuntime          live, swappable state (config/catalog/prices) + shop operations
 ├─ catalog/                  ── pure Java, NO Minecraft imports (unit-tested) ──
