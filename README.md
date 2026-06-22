@@ -48,7 +48,7 @@ Enable any combination in the config.
 |---|---|
 | **Command** | `/heads` opens the shop (permission-gated). |
 | **NPC** | `/headvault npc spawn <name>` places an invulnerable, AI-less shopkeeper villager. It persists across restarts; right-click opens the shop. Manage with `npc list` / `npc remove`. |
-| **Named villager** | Name any villager your configured name (default **“Head Trader”**) and right-clicking it opens the shop for **everyone** — no permission needed. Hold a name tag to rename it back to normal. |
+| **Named villager** | Name a villager (or, via `access.villager.mode`, any mob) your configured name (default **”Head Trader”**) and right-clicking opens the shop for **everyone** — no permission needed. Hold a name tag to rename it back to normal. |
 
 ## 💰 Economy
 
@@ -126,7 +126,14 @@ The config lives at **`config/headvault/config.json`** and hot-reloads with `/he
   "access": {
     "command":  { "enabled": true, "permissionLevel": 2 },
     "npc":      { "enabled": true },
-    "villager": { "enabled": true, "name": "Head Trader", "caseInsensitive": true }
+    "villager": {
+      "enabled": true,
+      "name": "Head Trader",
+      "caseInsensitive": true,
+      "mode": "ONLY_VILLAGER",        // which mobs can be a named trader: "ONLY_VILLAGER" | "ALL" | "MOB_WHITELIST" | "MOB_BLACKLIST"
+      "entityWhitelist": [],          // entity type ids allowed when mode = "MOB_WHITELIST", e.g. ["minecraft:zombie"]
+      "entityBlacklist": []           // entity type ids blocked when mode = "MOB_BLACKLIST"
+    }
   },
 
   "ui": {
@@ -153,7 +160,9 @@ The config lives at **`config/headvault/config.json`** and hot-reloads with `/he
 | `economy.categoryOverrides` | `{}` | Per-category price overrides, keyed by slug (`alphabet`, `animals`, `blocks`, `decoration`, `food-drinks`, `humanoid`, `humans`, `miscellaneous`, `monsters`, `plants`). |
 | `access.command.enabled` / `permissionLevel` | `true` / `2` | Toggle the `/heads` shop and its default OP level. |
 | `access.npc.enabled` | `true` | Toggle NPC shopkeepers. |
-| `access.villager.enabled` / `name` / `caseInsensitive` | `true` / `Head Trader` / `true` | Toggle named-villager mode and the trigger name. |
+| `access.villager.enabled` / `name` / `caseInsensitive` | `true` / `Head Trader` / `true` | Toggle named-trader mode, the trigger name, and case-sensitivity of the name match. |
+| `access.villager.mode` | `"ONLY_VILLAGER"` | Which entity types may be a named trader: `ONLY_VILLAGER` (villagers only — default, unchanged behavior), `ALL` (any mob), `MOB_WHITELIST` (only ids in `entityWhitelist`), `MOB_BLACKLIST` (any mob except ids in `entityBlacklist`). |
+| `access.villager.entityWhitelist` / `entityBlacklist` | `[]` / `[]` | Entity type ids (e.g. `"minecraft:zombie"`; a bare `"zombie"` assumes the `minecraft` namespace) used by the `MOB_WHITELIST` / `MOB_BLACKLIST` modes. |
 | `ui.title` / `showPriceInLore` / `headsPerPage` | `HeadVault` / `true` / `45` | Cosmetic shop options. |
 | `logging.purchaseVerbosity` | `"INFO"` | How loudly purchases are logged to console. |
 
