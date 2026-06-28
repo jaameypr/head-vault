@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfigTest {
@@ -68,5 +69,63 @@ class ConfigTest {
         HeadVaultConfig config = cm.loadOrCreate();
         assertEquals("v1", config.catalog.source, "falls back to defaults");
         assertTrue(Files.exists(dir.resolve("config.json.corrupt")), "corrupt file is backed up");
+    }
+
+    @Test
+    void villagerTraderDefaultsToOnlyVillager() {
+        HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
+        assertEquals("ONLY_VILLAGER", config.access.villager.mode);
+        assertTrue(config.access.villager.entityWhitelist.isEmpty());
+        assertTrue(config.access.villager.entityBlacklist.isEmpty());
+    }
+
+    @Test
+    void villagerFreezeDefaultsToOff() {
+        HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
+        assertFalse(config.access.villager.freeze, "freeze off by default");
+    }
+
+    @Test
+    void parsesVillagerFreeze() throws IOException {
+        String json = """
+                {
+                  "access": {
+                    "villager": {
+                      "freeze": true
+                    }
+                  }
+                }
+                """;
+        Files.createDirectories(dir);
+        Files.writeString(dir.resolve("config.json"), json, StandardCharsets.UTF_8);
+
+        HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
+        assertTrue(config.access.villager.freeze);
+    }
+
+    @Test
+    void parsesTraderModeAndEntityLists() throws IOException {
+        String json = """
+                {
+                  "access": {
+                    "villager": {
+                      "enabled": true,
+                      "name": "Head Trader",
+                      "mode": "MOB_WHITELIST",
+                      "entityWhitelist": ["minecraft:zombie", "minecraft:skeleton"],
+                      "entityBlacklist": ["minecraft:creeper"]
+                    }
+                  }
+                }
+                """;
+        Files.createDirectories(dir);
+        Files.writeString(dir.resolve("config.json"), json, StandardCharsets.UTF_8);
+
+        HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
+        assertEquals("MOB_WHITELIST", config.access.villager.mode);
+        assertEquals(2, config.access.villager.entityWhitelist.size());
+        assertTrue(config.access.villager.entityWhitelist.contains("minecraft:zombie"));
+        assertEquals(1, config.access.villager.entityBlacklist.size());
+        assertTrue(config.access.villager.entityBlacklist.contains("minecraft:creeper"));
     }
 }

@@ -6,8 +6,10 @@ import it.pruefert.headvault.economy.EconomyMode;
 import it.pruefert.headvault.economy.PriceResolver;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -94,6 +96,14 @@ public final class HeadVaultConfig {
             public boolean enabled = true;
             public String name = "Head Trader";
             public boolean caseInsensitive = true;
+            /** Which mob types may be a named trader: ONLY_VILLAGER | ALL | MOB_WHITELIST | MOB_BLACKLIST. */
+            public String mode = "ONLY_VILLAGER";
+            /** Entity type ids allowed when mode = MOB_WHITELIST, e.g. ["minecraft:zombie"]. */
+            public List<String> entityWhitelist = new ArrayList<>();
+            /** Entity type ids blocked when mode = MOB_BLACKLIST. */
+            public List<String> entityBlacklist = new ArrayList<>();
+            /** Freeze a mob in place (disable AI) when a name tag turns it into a trader; reverts on rename. */
+            public boolean freeze = false;
         }
     }
 

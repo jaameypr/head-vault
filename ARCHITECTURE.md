@@ -98,6 +98,10 @@ All three funnel into `HeadVaultRuntime.openShop(player)`:
 
 NPC and named-villager interactions are detected through `compat.EntityInteractions` (a single
 `UseEntityCallback` binding); returning a consumed result cancels the vanilla villager trade GUI.
+That same binding also drives the optional **freeze** (`access.villager.freeze`): when a name tag is
+held, `access.villager.TraderFreeze` predicts the resulting name from the item and locks the mob in
+place (disables AI, marked with the `headvault.frozen` tag) if it becomes a trader, reverting it on
+a rename that no longer matches — while vanilla still performs the actual rename.
 
 ## Testing
 

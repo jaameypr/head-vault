@@ -5,7 +5,7 @@
 **A server-side custom-heads shop for Minecraft Fabric SMPs.**
 Browse 90,000+ decorative player heads in a clean chest GUI — open it with a command, a shopkeeper NPC, or a named villager. No client mods. No resource packs. Vanilla players just play.
 
-`Minecraft 26.1.2` · `Fabric` · `Java 25` · `Server-side only`
+`Fabric` · `Server-side only`
 
 </div>
 
@@ -15,7 +15,6 @@ Browse 90,000+ decorative player heads in a clean chest GUI — open it with a c
 
 Custom heads make builds come alive — but handing them out one command at a time is painful. HeadVault turns the entire [minecraft-heads.com](https://minecraft-heads.com) catalog into an in-game shop your players can browse and buy from, however you want to run it: a command, a placed-down NPC, or a villager you name. It’s **server-side only**, so nobody needs to install anything to use it.
 
-It’s also built to **survive Minecraft updates**. Every version-fragile piece of code is quarantined in one package, so porting to the next MC release is usually a five-line version bump. (Details in [ARCHITECTURE.md](ARCHITECTURE.md).)
 
 ## 🎯 Features at a glance
 
@@ -25,6 +24,8 @@ It’s also built to **survive Minecraft updates**. Every version-fragile piece 
 - 🔎 **Search** — find heads by name or tag across the entire catalog.
 - 🙂 **Player heads** — type any username and get that player’s head as a clickable result.
 - 🚪 **Three ways in** — `/heads` command, persistent shopkeeper **NPCs**, and **named villagers**. Mix and match.
+- 🧟 **Any mob can be a trader** *(since 1.1.0)* — not just villagers. Name-tag a zombie, a cow, anything, and make it a shop. Choose which mob types qualify via an allow-all, whitelist, or blacklist mode.
+- 🧊 **Freeze named traders** *(since 1.1.0)* — opt-in: when a name tag turns a mob into a trader, lock it in place (disables AI) so it can't wander off, just like a spawned NPC. Reverts the moment you rename it back.
 - 💰 **Flexible economy** — free, item cost, or experience (levels/points), with **per-category pricing**. Purchases are atomic.
 - 📦 **Heads stack** — identical heads stack to 64.
 - ♻️ **Hot reload** — tweak the config and run `/headvault reload`. No restart.
@@ -48,7 +49,7 @@ Enable any combination in the config.
 |---|---|
 | **Command** | `/heads` opens the shop (permission-gated). |
 | **NPC** | `/headvault npc spawn <name>` places an invulnerable, AI-less shopkeeper villager. It persists across restarts; right-click opens the shop. Manage with `npc list` / `npc remove`. |
-| **Named villager** | Name a villager (or, via `access.villager.mode`, any mob) your configured name (default **”Head Trader”**) and right-clicking opens the shop for **everyone** — no permission needed. Hold a name tag to rename it back to normal. **Since 1.1.0:** optionally **freeze** new traders in place (disables AI) via `access.villager.freeze`. |
+| **Named villager** | Name any villager your configured name (default **“Head Trader”**) and right-clicking it opens the shop for **everyone** — no permission needed. Hold a name tag to rename it back to normal. **Since 1.1.0:** via `access.villager.mode` you can let *any mob* be a named trader — not just villagers (all / whitelist / blacklist); and `access.villager.freeze` can lock a fresh trader in place. |
 
 ## 💰 Economy
 
@@ -130,10 +131,11 @@ The config lives at **`config/headvault/config.json`** and hot-reloads with `/he
       "enabled": true,
       "name": "Head Trader",
       "caseInsensitive": true,
-      "mode": "ONLY_VILLAGER",        // which mobs can be a named trader: "ONLY_VILLAGER" | "ALL" | "MOB_WHITELIST" | "MOB_BLACKLIST"
+      // ── since 1.1.0 ──
+      "mode": "ONLY_VILLAGER",        // which mobs may be a named trader: "ONLY_VILLAGER" | "ALL" | "MOB_WHITELIST" | "MOB_BLACKLIST"
       "entityWhitelist": [],          // entity type ids allowed when mode = "MOB_WHITELIST", e.g. ["minecraft:zombie"]
       "entityBlacklist": [],          // entity type ids blocked when mode = "MOB_BLACKLIST"
-      "freeze": false                 // since 1.1.0: freeze a name-tagged trader in place (disables AI)
+      "freeze": false                 // freeze a name-tagged trader in place (disables AI)
     }
   },
 
@@ -162,8 +164,8 @@ The config lives at **`config/headvault/config.json`** and hot-reloads with `/he
 | `access.command.enabled` / `permissionLevel` | `true` / `2` | Toggle the `/heads` shop and its default OP level. |
 | `access.npc.enabled` | `true` | Toggle NPC shopkeepers. |
 | `access.villager.enabled` / `name` / `caseInsensitive` | `true` / `Head Trader` / `true` | Toggle named-trader mode, the trigger name, and case-sensitivity of the name match. |
-| `access.villager.mode` | `"ONLY_VILLAGER"` | Which entity types may be a named trader: `ONLY_VILLAGER` (villagers only — default, unchanged behavior), `ALL` (any mob), `MOB_WHITELIST` (only ids in `entityWhitelist`), `MOB_BLACKLIST` (any mob except ids in `entityBlacklist`). |
-| `access.villager.entityWhitelist` / `entityBlacklist` | `[]` / `[]` | Entity type ids (e.g. `"minecraft:zombie"`; a bare `"zombie"` assumes the `minecraft` namespace) used by the `MOB_WHITELIST` / `MOB_BLACKLIST` modes. |
+| `access.villager.mode` *(since 1.1.0)* | `"ONLY_VILLAGER"` | Which entity types may be a named trader: `ONLY_VILLAGER` (villagers only — default, unchanged behavior), `ALL` (any mob), `MOB_WHITELIST` (only ids in `entityWhitelist`), `MOB_BLACKLIST` (any mob except ids in `entityBlacklist`). |
+| `access.villager.entityWhitelist` / `entityBlacklist` *(since 1.1.0)* | `[]` / `[]` | Entity type ids (e.g. `"minecraft:zombie"`; a bare `"zombie"` assumes the `minecraft` namespace, and matching is case-insensitive) used by the `MOB_WHITELIST` / `MOB_BLACKLIST` modes. |
 | `access.villager.freeze` *(since 1.1.0)* | `false` | When a name tag turns a mob into a trader, freeze it in place — disables AI so it stops wandering, like a spawned NPC. Reverts automatically when the mob is renamed so it no longer qualifies. Off (default) = unchanged behavior. |
 | `ui.title` / `showPriceInLore` / `headsPerPage` | `HeadVault` / `true` / `45` | Cosmetic shop options. |
 | `logging.purchaseVerbosity` | `"INFO"` | How loudly purchases are logged to console. |
@@ -178,31 +180,6 @@ minecraft-heads.com offers two APIs:
 
 If the live source is unreachable, HeadVault automatically falls back to the last cache, then the bundled snapshot — the shop never goes dark.
 
-## 🔄 Updating to a new Minecraft version
-
-HeadVault is designed to make this trivial:
-
-1. Edit the version lines in **`gradle.properties`** (`minecraft_version`, `loader_version`, `fabric_api_version`, `sgui_version`, `permissions_version`). Check current values at [fabricmc.net/develop](https://fabricmc.net/develop).
-2. Run `./gradlew build`.
-3. If it compiles, you’re done. If anything breaks, it’ll be in the **`compat` package** — the single place that touches version-sensitive Minecraft APIs. Fix it there; nothing else needs changing.
-
-## 🛠️ Building from source
-
-```bash
-./gradlew build        # -> build/libs/head-vault-<version>+26.1.2.jar  (sgui + permissions bundled)
-./gradlew runServer    # launch a dev server to try it out
-```
-
-Requires JDK 25 on your `PATH`.
-
-## 📦 Releases & CI
-
-- Branches: `master` (stable), `experimental` (preview). Every push/PR builds and uploads an artifact.
-- Tag `vX.Y.Z` → stable GitHub Release + jar. A tag with a `-` suffix (e.g. `v1.2.0-experimental.1`) → pre-release.
-- **The Minecraft version is always visible:** jars are named `head-vault-<modversion>+<mcversion>.jar` (e.g. `head-vault-1.0.0+26.1.2.jar`), the in-game mod version reads `1.0.0+26.1.2`, and the GitHub Release is titled `vX.Y.Z — Minecraft 26.1.2`. So `v1.0.0` alone never leaves players guessing.
-- Modrinth publishing is wired into the release workflow.
-- Curseforge is also wired into the release workflow, but not used (yet?).
-
 ## 🙌 Credits
 
 - Head data from [minecraft-heads.com](https://minecraft-heads.com).
@@ -211,4 +188,4 @@ Requires JDK 25 on your `PATH`.
 
 ## 📄 License
 
-Released under the [MIT License](LICENSE).
+Released under MIT License.
