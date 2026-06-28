@@ -82,8 +82,7 @@ class ConfigTest {
     @Test
     void villagerFreezeDefaultsToOff() {
         HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
-        assertFalse(config.access.villager.freeze.noAi, "noAi off by default");
-        assertFalse(config.access.villager.freeze.invulnerable, "invulnerable off by default");
+        assertFalse(config.access.villager.freeze, "freeze off by default");
     }
 
     @Test
@@ -92,7 +91,7 @@ class ConfigTest {
                 {
                   "access": {
                     "villager": {
-                      "freeze": { "noAi": true, "invulnerable": true }
+                      "freeze": true
                     }
                   }
                 }
@@ -101,8 +100,7 @@ class ConfigTest {
         Files.writeString(dir.resolve("config.json"), json, StandardCharsets.UTF_8);
 
         HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
-        assertTrue(config.access.villager.freeze.noAi);
-        assertTrue(config.access.villager.freeze.invulnerable);
+        assertTrue(config.access.villager.freeze);
     }
 
     @Test

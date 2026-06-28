@@ -7,10 +7,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 
 /**
- * Freezes a mob the moment a name tag turns it into a named trader, mirroring a spawned NPC. Which
- * effects apply (no-AI, invulnerable) is controlled by {@code access.villager.freeze}. The freeze is
- * marked with a scoreboard tag so it can be cleanly reverted when the mob is renamed to something
- * that no longer qualifies — and so mobs we never froze are left untouched.
+ * Freezes a mob in place the moment a name tag turns it into a named trader, like a spawned NPC,
+ * when {@code access.villager.freeze} is enabled. "Freeze" disables the mob's AI so it stops
+ * wandering. The freeze is marked with a scoreboard tag so it can be cleanly reverted when the mob
+ * is renamed to something that no longer qualifies — and so mobs we never froze are left untouched.
  */
 public final class TraderFreeze {
 
@@ -30,23 +30,17 @@ public final class TraderFreeze {
         if (newName == null) {
             return;
         }
-        HeadVaultConfig.Access.Villager.Freeze freeze = config.access.villager.freeze;
         boolean becomesTrader = NamedVillagerListener.matchesName(newName, McEntities.typeId(mob), config);
-        if (becomesTrader && (freeze.noAi || freeze.invulnerable)) {
-            apply(mob, freeze);
+        if (becomesTrader && config.access.villager.freeze) {
+            apply(mob);
         } else {
             clear(mob);
         }
     }
 
-    /** Apply the configured freeze effects and tag the mob as frozen. */
-    public static void apply(Mob mob, HeadVaultConfig.Access.Villager.Freeze freeze) {
-        if (freeze.noAi) {
-            mob.setNoAi(true);
-        }
-        if (freeze.invulnerable) {
-            mob.setInvulnerable(true);
-        }
+    /** Disable AI so the trader stays put, and tag the mob as frozen. */
+    public static void apply(Mob mob) {
+        mob.setNoAi(true);
         mob.addTag(FROZEN_TAG);
     }
 
@@ -56,7 +50,6 @@ public final class TraderFreeze {
             return;
         }
         mob.setNoAi(false);
-        mob.setInvulnerable(false);
         mob.removeTag(FROZEN_TAG);
     }
 }

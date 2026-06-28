@@ -48,7 +48,7 @@ Enable any combination in the config.
 |---|---|
 | **Command** | `/heads` opens the shop (permission-gated). |
 | **NPC** | `/headvault npc spawn <name>` places an invulnerable, AI-less shopkeeper villager. It persists across restarts; right-click opens the shop. Manage with `npc list` / `npc remove`. |
-| **Named villager** | Name a villager (or, via `access.villager.mode`, any mob) your configured name (default **”Head Trader”**) and right-clicking opens the shop for **everyone** — no permission needed. Hold a name tag to rename it back to normal. **Since 1.1.0:** optionally **freeze** new traders in place / make them invulnerable via `access.villager.freeze`. |
+| **Named villager** | Name a villager (or, via `access.villager.mode`, any mob) your configured name (default **”Head Trader”**) and right-clicking opens the shop for **everyone** — no permission needed. Hold a name tag to rename it back to normal. **Since 1.1.0:** optionally **freeze** new traders in place (disables AI) via `access.villager.freeze`. |
 
 ## 💰 Economy
 
@@ -133,7 +133,7 @@ The config lives at **`config/headvault/config.json`** and hot-reloads with `/he
       "mode": "ONLY_VILLAGER",        // which mobs can be a named trader: "ONLY_VILLAGER" | "ALL" | "MOB_WHITELIST" | "MOB_BLACKLIST"
       "entityWhitelist": [],          // entity type ids allowed when mode = "MOB_WHITELIST", e.g. ["minecraft:zombie"]
       "entityBlacklist": [],          // entity type ids blocked when mode = "MOB_BLACKLIST"
-      "freeze": { "noAi": false, "invulnerable": false }  // since 1.1.0: lock / protect a name-tagged trader
+      "freeze": false                 // since 1.1.0: freeze a name-tagged trader in place (disables AI)
     }
   },
 
@@ -164,7 +164,7 @@ The config lives at **`config/headvault/config.json`** and hot-reloads with `/he
 | `access.villager.enabled` / `name` / `caseInsensitive` | `true` / `Head Trader` / `true` | Toggle named-trader mode, the trigger name, and case-sensitivity of the name match. |
 | `access.villager.mode` | `"ONLY_VILLAGER"` | Which entity types may be a named trader: `ONLY_VILLAGER` (villagers only — default, unchanged behavior), `ALL` (any mob), `MOB_WHITELIST` (only ids in `entityWhitelist`), `MOB_BLACKLIST` (any mob except ids in `entityBlacklist`). |
 | `access.villager.entityWhitelist` / `entityBlacklist` | `[]` / `[]` | Entity type ids (e.g. `"minecraft:zombie"`; a bare `"zombie"` assumes the `minecraft` namespace) used by the `MOB_WHITELIST` / `MOB_BLACKLIST` modes. |
-| `access.villager.freeze.noAi` / `invulnerable` *(since 1.1.0)* | `false` / `false` | When a name tag turns a mob into a trader, optionally disable its AI (`noAi`, freezes it in place like a spawned NPC) and/or make it `invulnerable`. Reverts automatically when the mob is renamed so it no longer qualifies. Both off (default) = unchanged behavior. |
+| `access.villager.freeze` *(since 1.1.0)* | `false` | When a name tag turns a mob into a trader, freeze it in place — disables AI so it stops wandering, like a spawned NPC. Reverts automatically when the mob is renamed so it no longer qualifies. Off (default) = unchanged behavior. |
 | `ui.title` / `showPriceInLore` / `headsPerPage` | `HeadVault` / `true` / `45` | Cosmetic shop options. |
 | `logging.purchaseVerbosity` | `"INFO"` | How loudly purchases are logged to console. |
 
