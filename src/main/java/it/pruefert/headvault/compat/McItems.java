@@ -1,9 +1,12 @@
 package it.pruefert.headvault.compat;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.Optional;
@@ -33,5 +36,16 @@ public final class McItems {
     /** True if the player's main hand holds a name tag (used to let vanilla renaming take precedence). */
     public static boolean isHoldingNameTag(ServerPlayer player) {
         return player.getMainHandItem().getItem() == Items.NAME_TAG;
+    }
+
+    /**
+     * The custom name stored on the player's main-hand item (the name a name tag would apply), or
+     * empty if the item carries none. A name tag with no custom name doesn't rename anything, so an
+     * empty result means "vanilla will not change the mob's name".
+     */
+    public static Optional<String> mainHandCustomName(ServerPlayer player) {
+        ItemStack stack = player.getMainHandItem();
+        Component name = stack.get(DataComponents.CUSTOM_NAME);
+        return name == null ? Optional.empty() : Optional.of(name.getString());
     }
 }

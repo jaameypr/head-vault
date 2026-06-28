@@ -102,6 +102,15 @@ public final class HeadVaultConfig {
             public List<String> entityWhitelist = new ArrayList<>();
             /** Entity type ids blocked when mode = MOB_BLACKLIST. */
             public List<String> entityBlacklist = new ArrayList<>();
+            /** Lock a mob in place when a name tag turns it into a trader; reverts on rename. */
+            public Freeze freeze = new Freeze();
+
+            public static final class Freeze {
+                /** Disable AI so the trader stays put (like a spawned NPC). */
+                public boolean noAi = false;
+                /** Make the trader invulnerable so it can't be killed. */
+                public boolean invulnerable = false;
+            }
         }
     }
 

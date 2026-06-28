@@ -3,9 +3,11 @@ package it.pruefert.headvault;
 import it.pruefert.headvault.access.command.HeadVaultCommands;
 import it.pruefert.headvault.access.npc.NpcManager;
 import it.pruefert.headvault.access.villager.NamedVillagerListener;
+import it.pruefert.headvault.access.villager.TraderFreeze;
 import it.pruefert.headvault.compat.EntityInteractions;
 import it.pruefert.headvault.compat.McItems;
 import it.pruefert.headvault.config.HeadVaultConfig;
+import net.minecraft.world.entity.Mob;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -34,7 +36,15 @@ public class HeadVault implements ModInitializer {
         // One interaction handler serves both the NPC and named-villager access modes.
         EntityInteractions.register((player, entity) -> {
             // Holding a name tag? Let vanilla renaming win, so a "Head Trader" can be renamed back.
+            // First, mirror the rename into freeze state so a fresh trader locks in place (and a
+            // renamed-away one unfreezes).
             if (McItems.isHoldingNameTag(player)) {
+                HeadVaultConfig config = runtime.config();
+                if (config.access.villager.enabled
+                        && entity instanceof Mob mob
+                        && !npcManager.isNpc(mob)) {
+                    TraderFreeze.onNameTag(player, mob, config);
+                }
                 return false;
             }
             HeadVaultConfig config = runtime.config();

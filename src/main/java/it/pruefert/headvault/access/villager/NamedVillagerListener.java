@@ -17,24 +17,33 @@ public final class NamedVillagerListener {
     }
 
     public static boolean matches(Entity entity, HeadVaultConfig config) {
-        HeadVaultConfig.Access.Villager v = config.access.villager;
-
-        // 1. Name match first — cheap, rejects the common case before any registry lookup.
         Component customName = entity.getCustomName();
         if (customName == null) {
             return false;
         }
-        if (v.name == null || v.name.isBlank()) {
+        return matchesName(customName.getString(), McEntities.typeId(entity), config);
+    }
+
+    /**
+     * Pure trader-match decision: does a candidate name on the given entity type qualify as a trader?
+     * Used both at right-click time ({@link #matches}) and when a name tag is applied, to decide
+     * whether the freeze hook should fire. Kept free of Minecraft types so it stays unit-testable.
+     */
+    public static boolean matchesName(String candidateName, String entityTypeId, HeadVaultConfig config) {
+        HeadVaultConfig.Access.Villager v = config.access.villager;
+
+        // 1. Name match first — cheap, rejects the common case before any registry lookup.
+        if (candidateName == null || v.name == null || v.name.isBlank()) {
             return false;
         }
-        String actual = customName.getString();
-        boolean nameOk = v.caseInsensitive ? actual.equalsIgnoreCase(v.name) : actual.equals(v.name);
+        boolean nameOk = v.caseInsensitive
+                ? candidateName.equalsIgnoreCase(v.name)
+                : candidateName.equals(v.name);
         if (!nameOk) {
             return false;
         }
 
         // 2. Entity-type eligibility per configured mode.
-        return TraderMode.parse(v.mode)
-                .allows(McEntities.typeId(entity), v.entityWhitelist, v.entityBlacklist);
+        return TraderMode.parse(v.mode).allows(entityTypeId, v.entityWhitelist, v.entityBlacklist);
     }
 }

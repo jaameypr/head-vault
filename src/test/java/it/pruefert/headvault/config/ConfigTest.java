@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfigTest {
@@ -76,6 +77,32 @@ class ConfigTest {
         assertEquals("ONLY_VILLAGER", config.access.villager.mode);
         assertTrue(config.access.villager.entityWhitelist.isEmpty());
         assertTrue(config.access.villager.entityBlacklist.isEmpty());
+    }
+
+    @Test
+    void villagerFreezeDefaultsToOff() {
+        HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
+        assertFalse(config.access.villager.freeze.noAi, "noAi off by default");
+        assertFalse(config.access.villager.freeze.invulnerable, "invulnerable off by default");
+    }
+
+    @Test
+    void parsesVillagerFreeze() throws IOException {
+        String json = """
+                {
+                  "access": {
+                    "villager": {
+                      "freeze": { "noAi": true, "invulnerable": true }
+                    }
+                  }
+                }
+                """;
+        Files.createDirectories(dir);
+        Files.writeString(dir.resolve("config.json"), json, StandardCharsets.UTF_8);
+
+        HeadVaultConfig config = new ConfigManager(dir, log).loadOrCreate();
+        assertTrue(config.access.villager.freeze.noAi);
+        assertTrue(config.access.villager.freeze.invulnerable);
     }
 
     @Test
