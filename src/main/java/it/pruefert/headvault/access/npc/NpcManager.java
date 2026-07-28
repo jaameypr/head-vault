@@ -2,13 +2,13 @@ package it.pruefert.headvault.access.npc;
 
 import it.pruefert.headvault.HeadVaultRuntime;
 import it.pruefert.headvault.compat.GuiText;
+import it.pruefert.headvault.compat.McItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -51,7 +51,7 @@ public final class NpcManager {
     public boolean spawn(ServerPlayer admin, String name) {
         ServerLevel level = admin.level();
         BlockPos pos = admin.blockPosition();
-        Villager villager = EntityType.VILLAGER.spawn(level, pos, EntitySpawnReason.COMMAND);
+        Villager villager = McItems.villagerType().spawn(level, pos, EntitySpawnReason.COMMAND);
         if (villager == null) {
             return false;
         }

@@ -5,6 +5,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -47,5 +49,19 @@ public final class McItems {
         ItemStack stack = player.getMainHandItem();
         Component name = stack.get(DataComponents.CUSTOM_NAME);
         return name == null ? Optional.empty() : Optional.of(name.getString());
+    }
+
+    /**
+     * The vanilla villager {@link EntityType}, used to spawn shop NPCs. Mojang split the built-in
+     * entity-type constants out of {@code EntityType} into a separate {@code EntityTypes} holder
+     * class starting in 26.2 (the constant field itself, e.g. {@code VILLAGER}, moved wholesale);
+     * isolated here so nothing outside {@code compat} needs to know which class currently holds it.
+     */
+    public static EntityType<Villager> villagerType() {
+        //? if <26.2 {
+        return EntityType.VILLAGER;
+        //?} else {
+        /*return net.minecraft.world.entity.EntityTypes.VILLAGER;
+        *///?}
     }
 }
