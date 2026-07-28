@@ -49,8 +49,27 @@ abstract (factory instead of constructor), turned authlib `GameProfile` into a r
 (`properties()` not `getProperties()`), renamed `moveTo`→`snapTo` and `getTags`→`entityTags`, and
 restructured interaction events. All of that is absorbed by `compat`.
 
-`gradle.properties` is the version control panel — five lines pin Minecraft, Loader, Fabric API,
-sgui, and permissions. The release workflow reads the mod version from the git tag.
+The mod now builds for **multiple Minecraft versions at once** from this same source tree, via
+[Stonecutter](https://stonecutter.kikugie.dev) 0.9.6 (Kotlin DSL):
+
+- `settings.gradle.kts` declares the version nodes — `versions("26.1.2", "26.2")`, with
+  `vcsVersion = "26.1.2"` as the checked-in active node.
+- `stonecutter.properties.toml` holds global keys (`mod.version`, `deps.fabric_loader`,
+  `deps.permissions`) plus one table per version (`["26.1.2"]`, `["26.2"]`) for the values that
+  differ: `deps.fabric_api`, `deps.sgui`, `mod.mc_compat`, `mod.mc_releases`.
+- `build.gradle.kts` is a single shared build script that every node runs; it reads the
+  per-version values via `sc.properties.get<String>("...")`. The Loom plugin (`net.fabricmc.fabric-loom`)
+  runs unmapped for both targets — 26.1.2 and 26.2 are both unobfuscated, so there's still no
+  mappings line.
+- `./gradlew build` builds the active node; `./gradlew chiseledBuild` builds **every** node in one
+  pass, collecting each jar to `build/libs/<mod.version>/`. The release workflow injects the mod
+  version from the git tag into `stonecutter.properties.toml` before running `chiseledBuild`.
+
+`compat` now serves multiple simultaneous targets, so where the Minecraft APIs for 26.1.2 and 26.2
+diverge, the difference is guarded *inside* `compat` with a Stonecutter `//?` conditional comment
+instead of being solved by branching the whole package. For example, `compat.McItems.villagerType()`
+guards `EntityType.VILLAGER` (26.1.2) vs. `EntityTypes.VILLAGER` (26.2) behind one `//?` block —
+one method serves both versions, and nothing that calls it needs to know.
 
 ## Data flow
 

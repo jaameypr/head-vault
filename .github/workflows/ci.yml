@@ -23,11 +23,11 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build
-        run: ./gradlew build --stacktrace
+        run: ./gradlew chiseledBuild --stacktrace
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-${{ github.ref_name }}-${{ github.sha }}
-          path: build/libs/*.jar
+          path: build/libs/**/*.jar
           if-no-files-found: error

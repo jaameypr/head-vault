@@ -1,0 +1,19 @@
+mod.id = "headvault"
+mod.name = "HeadVault"
+mod.group = "it.pruefert"
+mod.version = "1.2.0"
+
+deps.fabric_loader = "0.19.3"
+deps.permissions = "0.7.0"
+
+["26.1.2"]
+mod.mc_compat = "~26.1"
+mod.mc_releases = ["26.1", "26.1.1", "26.1.2"]
+deps.fabric_api = "0.150.0+26.1.2"
+deps.sgui = "2.0.0+26.1"
+
+["26.2"]
+mod.mc_compat = "~26.2"
+mod.mc_releases = ["26.2"]
+deps.fabric_api = "0.156.0+26.2"
+deps.sgui = "2.1.0+26.2"
