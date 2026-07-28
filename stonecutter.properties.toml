@@ -1,7 +1,7 @@
 mod.id = "headvault"
 mod.name = "HeadVault"
 mod.group = "it.pruefert"
-mod.version = "0.1.0"
+mod.version = "1.2.0"
 
 deps.fabric_loader = "0.19.3"
 deps.permissions = "0.7.0"
