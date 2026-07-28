@@ -28,18 +28,19 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Read Minecraft version
-        id: mc
-        run: echo "mc=$(grep '^minecraft_version=' gradle.properties | cut -d= -f2 | tr -d '\r')" >> "$GITHUB_OUTPUT"
+      - name: Inject version into stonecutter.properties.toml
+        run: |
+          sed -i 's/^mod.version = .*/mod.version = "${{ steps.version.outputs.version }}"/' stonecutter.properties.toml
+          grep '^mod.version' stonecutter.properties.toml
 
-      - name: Build
-        run: ./gradlew build --stacktrace -Pmod_version=${{ steps.version.outputs.version }}
+      - name: Build all versions
+        run: ./gradlew chiseledBuild --stacktrace
 
-      # Collect only the distributable jar (exclude -sources/-dev jars) for the release.
-      - name: Collect release jar
+      - name: Collect distributable jars
+        id: collect
         run: |
           mkdir -p dist
-          for f in build/libs/head-vault-*.jar; do
+          for f in build/libs/${{ steps.version.outputs.version }}/head-vault-*.jar; do
             case "$f" in
               *-sources.jar|*-dev.jar) ;;
               *) cp "$f" dist/ ;;
@@ -50,27 +51,33 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ github.ref_name }} — Minecraft ${{ steps.mc.outputs.mc }}
-          body: "**Minecraft ${{ steps.mc.outputs.mc }}** · Fabric · server-side"
+          name: ${{ github.ref_name }} — Minecraft 26.1.2 + 26.2
+          body: "**Minecraft 26.1.2 & 26.2** · Fabric · server-side"
           append_body: true
           generate_release_notes: true
           prerelease: ${{ contains(github.ref_name, '-') }}
           files: dist/*.jar
 
-      # ── Publishing to Modrinth / CurseForge (disabled: PUBLISH=none) ─────────────
-      # To enable, set repo secrets MODRINTH_TOKEN and CURSEFORGE_TOKEN, fill in the
-      # ids below, and uncomment this step. version-type is auto: 'beta' for a tag
-      # containing '-' (e.g. v1.2.0-experimental.1), else 'release'.
-      #
-      - name: Publish to Modrinth & CurseForge
+      - name: Publish 26.1.2 to Modrinth
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: YbXwRQXG
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-      #    curseforge-id: <CURSEFORGE_ID>
-      #    curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          files: dist/*.jar
+          files: dist/head-vault-*+26.1.2.jar
+          name: HeadVault ${{ steps.version.outputs.version }} (Minecraft 26.1.2)
+          version: ${{ steps.version.outputs.version }}+26.1.2
           loaders: fabric
-          game-versions: 26.1.2
+          game-versions: '26.1.2'
+          version-type: ${{ contains(github.ref_name, '-') && 'beta' || 'release' }}
+
+      - name: Publish 26.2 to Modrinth
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: YbXwRQXG
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          files: dist/head-vault-*+26.2.jar
+          name: HeadVault ${{ steps.version.outputs.version }} (Minecraft 26.2)
+          version: ${{ steps.version.outputs.version }}+26.2
+          loaders: fabric
+          game-versions: '26.2'
           version-type: ${{ contains(github.ref_name, '-') && 'beta' || 'release' }}
