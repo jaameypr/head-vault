@@ -15,7 +15,7 @@ Browse 90,000+ decorative player heads in a clean chest GUI — open it with a c
 
 Custom heads make builds come alive — but handing them out one command at a time is painful. HeadVault turns the entire [minecraft-heads.com](https://minecraft-heads.com) catalog into an in-game shop your players can browse and buy from, however you want to run it: a command, a placed-down NPC, or a villager you name. It’s **server-side only**, so nobody needs to install anything to use it.
 
-It’s also built to **survive Minecraft updates** — and to support more than one at a time. Every version-fragile piece of code is quarantined in one package, and a [Stonecutter](https://github.com/stonecutter-mc/stonecutter) multi-version build compiles the whole mod against every supported Minecraft release from one shared source tree. (Details in [ARCHITECTURE.md](ARCHITECTURE.md).)
+It’s also built to **survive Minecraft updates** — and to support more than one at a time. Every version-fragile piece of code is quarantined in one package, and a [Stonecutter](https://stonecutter.kikugie.dev) multi-version build compiles the whole mod against every supported Minecraft release from one shared source tree. (Details in [ARCHITECTURE.md](ARCHITECTURE.md).)
 
 ## 🎯 Features at a glance
 
@@ -180,7 +180,7 @@ If the live source is unreachable, HeadVault automatically falls back to the las
 
 ## 🔄 Updating to a new Minecraft version
 
-HeadVault builds every supported Minecraft version from one source tree with [Stonecutter](https://github.com/stonecutter-mc/stonecutter). To add a new one:
+HeadVault builds every supported Minecraft version from one source tree with [Stonecutter](https://stonecutter.kikugie.dev). To add a new one:
 
 1. Add it to `versions(...)` in **`settings.gradle.kts`**, then add a matching table to **`stonecutter.properties.toml`** (`deps.fabric_api`, `deps.sgui`, `mod.mc_compat`, `mod.mc_releases`). Check current dependency values at [fabricmc.net/develop](https://fabricmc.net/develop).
 2. Run `./gradlew chiseledBuild` to build every version node in one pass (each jar lands in `build/libs/<mod.version>/`).

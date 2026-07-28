@@ -50,7 +50,7 @@ abstract (factory instead of constructor), turned authlib `GameProfile` into a r
 restructured interaction events. All of that is absorbed by `compat`.
 
 The mod now builds for **multiple Minecraft versions at once** from this same source tree, via
-[Stonecutter](https://github.com/stonecutter-mc/stonecutter) 0.9.6 (Kotlin DSL):
+[Stonecutter](https://stonecutter.kikugie.dev) 0.9.6 (Kotlin DSL):
 
 - `settings.gradle.kts` declares the version nodes — `versions("26.1.2", "26.2")`, with
   `vcsVersion = "26.1.2"` as the checked-in active node.
