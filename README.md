@@ -189,8 +189,8 @@ HeadVault builds every supported Minecraft version from one source tree with [St
 ## 🛠️ Building from source
 
 ```bash
-./gradlew build          # -> build/libs/<mod.version>/head-vault-<version>+<mc-version>.jar for the active node (sgui + permissions bundled)
-./gradlew chiseledBuild  # -> builds every supported version (26.1.2 + 26.2) in one pass
+./gradlew build          # -> versions/<active>/build/libs/head-vault-<version>+<mc-version>.jar (sgui + permissions bundled)
+./gradlew chiseledBuild  # -> build/libs/<mod.version>/head-vault-<version>+<mc-version>.jar for every supported version (26.1.2 + 26.2)
 ./gradlew runServer      # launch a dev server for the active node to try it out
 ```
 
