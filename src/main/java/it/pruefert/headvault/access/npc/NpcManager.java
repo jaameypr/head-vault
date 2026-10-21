@@ -2,6 +2,7 @@ package it.pruefert.headvault.access.npc;
 
 import it.pruefert.headvault.HeadVaultRuntime;
 import it.pruefert.headvault.compat.GuiText;
+import it.pruefert.headvault.compat.McEntities;
 import it.pruefert.headvault.compat.McItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
@@ -58,7 +59,7 @@ public final class NpcManager {
         villager.snapTo(admin.position(), admin.getYRot(), 0.0f);
         villager.setCustomName(GuiText.name(name));
         villager.setCustomNameVisible(true);
-        villager.setInvulnerable(true);
+        McEntities.setInvulnerable(villager, true);
         villager.setNoAi(true);
         villager.setPersistenceRequired();
         villager.addTag(NPC_TAG);
