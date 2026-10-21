@@ -34,8 +34,8 @@ Custom heads make builds come alive — but handing them out one command at a ti
 
 ## 🚀 Getting started
 
-1. **Requirements:** a Fabric **26.1.2** server on **Java 25**, with [Fabric API](https://modrinth.com/mod/fabric-api) installed.
-2. Drop `head-vault-<version>.jar` into your server’s `mods/` folder. *(sgui and fabric-permissions-api are bundled inside — nothing else to install.)*
+1. **Requirements:** a Fabric **26.1.2, 26.2 or 26.3** server on **Java 25**, with [Fabric API](https://modrinth.com/mod/fabric-api) installed.
+2. Drop `head-vault-<version>+<mc-version>.jar` — the jar matching your server’s Minecraft version — into your server’s `mods/` folder. *(sgui and fabric-permissions-api are bundled inside — nothing else to install.)*
 3. Start the server. HeadVault writes its config to `config/headvault/config.json` and begins downloading the head catalog in the background.
 4. Run **`/heads`** — and you’re shopping. 🎉
 

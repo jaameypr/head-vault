@@ -79,7 +79,13 @@ public final class PlayerEconomy {
         // inventory never silently swallows the purchase.
         player.getInventory().add(stack);
         if (!stack.isEmpty()) {
+            // 26.3+ needs a Prediction: SERVER_ONLY = server-initiated drop, as vanilla does for
+            // leftover container items.
+            //? if <26.3 {
             player.drop(stack, false);
+            //?} else {
+            /*player.drop(stack, false, net.minecraft.util.Prediction.SERVER_ONLY);
+            *///?}
         }
     }
 }

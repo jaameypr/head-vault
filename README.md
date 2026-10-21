@@ -5,7 +5,7 @@
 **A server-side custom-heads shop for Minecraft Fabric SMPs.**
 Browse 90,000+ decorative player heads in a clean chest GUI — open it with a command, a shopkeeper NPC, or a named villager. No client mods. No resource packs. Vanilla players just play.
 
-`Minecraft 26.1.2 / 26.2` · `Fabric` · `Java 25` · `Server-side only`
+`Minecraft 26.1.2 / 26.2 / 26.3` · `Fabric` · `Java 25` · `Server-side only`
 
 </div>
 
@@ -33,8 +33,8 @@ It’s also built to **survive Minecraft updates** — and to support more than 
 
 ## 🚀 Getting started
 
-1. **Requirements:** a Fabric **26.1.2 or 26.2** server on **Java 25**, with [Fabric API](https://modrinth.com/mod/fabric-api) installed.
-2. Drop `head-vault-<version>+<mc-version>.jar` — the jar matching your server’s Minecraft version (26.1.2 or 26.2) — into your server’s `mods/` folder. *(sgui and fabric-permissions-api are bundled inside — nothing else to install.)*
+1. **Requirements:** a Fabric **26.1.2, 26.2 or 26.3** server on **Java 25**, with [Fabric API](https://modrinth.com/mod/fabric-api) installed.
+2. Drop `head-vault-<version>+<mc-version>.jar` — the jar matching your server’s Minecraft version (26.1.2, 26.2 or 26.3) — into your server’s `mods/` folder. *(sgui and fabric-permissions-api are bundled inside — nothing else to install.)*
 3. Start the server. HeadVault writes its config to `config/headvault/config.json` and begins downloading the head catalog in the background.
 4. Run **`/heads`** — and you’re shopping. 🎉
 
@@ -190,7 +190,7 @@ HeadVault builds every supported Minecraft version from one source tree with [St
 
 ```bash
 ./gradlew build          # -> versions/<active>/build/libs/head-vault-<version>+<mc-version>.jar (sgui + permissions bundled)
-./gradlew chiseledBuild  # -> build/libs/<mod.version>/head-vault-<version>+<mc-version>.jar for every supported version (26.1.2 + 26.2)
+./gradlew chiseledBuild  # -> build/libs/<mod.version>/head-vault-<version>+<mc-version>.jar for every supported version (26.1.2 + 26.2 + 26.3)
 ./gradlew runServer      # launch a dev server for the active node to try it out
 ```
 
@@ -199,8 +199,8 @@ Requires JDK 25 on your `PATH`.
 ## 📦 Releases & CI
 
 - Branches: `master` (stable), `experimental` (preview). Every push/PR builds and uploads an artifact for every supported Minecraft version.
-- Tag `vX.Y.Z` → one stable GitHub Release carrying jars for **both** 26.1.2 and 26.2. A tag with a `-` suffix (e.g. `v1.2.0-experimental.1`) → pre-release.
-- **The Minecraft version is always visible:** jars are named `head-vault-<modversion>+<mcversion>.jar` (e.g. `head-vault-1.0.0+26.1.2.jar` and `head-vault-1.0.0+26.2.jar`), the in-game mod version reads `1.0.0+<mcversion>`, and the GitHub Release is titled `vX.Y.Z — Minecraft 26.1.2 + 26.2`. So `v1.0.0` alone never leaves players guessing which jar to grab.
+- Tag `vX.Y.Z` → one stable GitHub Release carrying jars for 26.1.2, 26.2 and 26.3. A tag with a `-` suffix (e.g. `v1.2.0-experimental.1`) → pre-release.
+- **The Minecraft version is always visible:** jars are named `head-vault-<modversion>+<mcversion>.jar` (e.g. `head-vault-1.0.0+26.1.2.jar`, `head-vault-1.0.0+26.2.jar` and `head-vault-1.0.0+26.3.jar`), the in-game mod version reads `1.0.0+<mcversion>`, and the GitHub Release is titled `vX.Y.Z — Minecraft 26.1.2 + 26.2 + 26.3`. So `v1.0.0` alone never leaves players guessing which jar to grab.
 - Modrinth publishing is wired into the release workflow, with one deployment per Minecraft version.
 - Curseforge is also wired into the release workflow, but not used (yet?).
 

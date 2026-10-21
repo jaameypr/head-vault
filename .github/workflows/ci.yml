@@ -25,9 +25,16 @@ jobs:
       - name: Build
         run: ./gradlew chiseledBuild --stacktrace
 
+      # PR refs look like "4/merge" and branches may contain "/", which artifact names reject.
+      - name: Derive artifact name
+        id: artifact
+        env:
+          REF: ${{ github.head_ref || github.ref_name }}
+        run: echo "name=${{ github.event.repository.name }}-${REF//\//-}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-${{ github.ref_name }}-${{ github.sha }}
+          name: ${{ steps.artifact.outputs.name }}
           path: build/libs/**/*.jar
           if-no-files-found: error
